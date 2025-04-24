@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🎬 Telugu Movie Ratings</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #f12711, #f5af19);
+      padding: 30px;
+      color: #fff;
+      text-align: center;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 15px;
+      padding: 25px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    select, button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      margin: 10px 0;
+    }
+
+    button {
+      background-color: #e67e22;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #d35400;
+    }
+
+    img {
+      width: 200px;
+      height: auto;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+
+    .description {
+      margin-top: 15px;
+      font-size: 18px;
+      background-color: #ffffff22;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .rating-display {
+      font-size: 20px;
+      color: #FFD700;
+      margin-top: 10px;
+    }
+
+    h2 {
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🎥 Rate Your Favorite Telugu Movie</h2>
+  <div class="container">
+    <select id="movieDropdown" onchange="showMovieDetails()">
+      <option value="">-- Choose a movie --</option>
+      <option value="gangleader">Gangleader</option>
+      <option value="pushpa">Pushpa</option>
+      <option value="gunturkaram">Guntur Kaaram</option>
+      <option value="athadu">Athadu</option>
+      <option value="svsc">SVSC</option>
+      <option value="djtillu">DJ Tillu</option>
+      <option value="magadheera">Magadheera</option>
+      <option value="bahubali">Bahubali</option>
+      <option value="geethagovindam">Geetha Govindam</option>
+      <option value="taxiwala">Taxiwala</option>
+      <option value="sarrainodu">Sarrainodu</option>
+    </select>
+
+    <div id="movieDisplay" style="display: none;">
+      <img id="moviePoster" src="" alt="Movie Poster">
+      <div class="description" id="movieDescription"></div>
+
+      <select id="ratingDropdown">
+        <option value="">Give a Rating</option>
+        <option value="5">★★★★★ - Excellent</option>
+        <option value="4">★★★★☆ - Good</option>
+        <option value="3">★★★☆☆ - Average</option>
+        <option value="2">★★☆☆☆ - Poor</option>
+        <option value="1">★☆☆☆☆ - Bad</option>
+      </select>
+
+      <button onclick="submitRating()">Submit Rating</button>
+
+      <div class="rating-display" id="ratingOutput"></div>
+      <div class="rating-display" id="avgRatingDisplay"></div>
+    </div>
+  </div>
+
+  <script>
+    const movies = {
+      gangleader: {
+        poster: "https://tse1.mm.bing.net/th?id=OIP.gOjPKIwnt2Z1IDLw1KYGkwHaKX&pid=Api&P=0&h=180",
+        description: " Hero:Nani,heroine:Priyanka mohan,Description:A clever revenge thriller with comedy starring Nani.",
+        ratings: [],
+      },
+      pushpa: {
+        poster: "https://tse4.mm.bing.net/th?id=OIP.uuvZBuHZ2KX4xNiYuIYRYgHaNK&pid=Api&P=0&h=180",
+        description: "Allu Arjun becomes Pushpa Raj, a fearless red sandalwood smuggler.",
+        ratings: [],
+      },
+      gunturkaram: {
+        poster: "https://tse1.mm.bing.net/th?id=OIP.WhTKKSayTGlCM5_szOdWKQAAAA&pid=Api&P=0&h=180",
+        description: "Mahesh Babu's latest mass entertainer filled with action and drama.",
+        ratings: [],
+      },
+      athadu: {
+        poster: "https://tse4.mm.bing.net/th?id=OIP.xUyg4Vx4UsO1a9uQh1-XxAHaEK&pid=Api&P=0&h=180",
+        description: "A contract killer gets tangled in a case of mistaken identity.",
+        ratings: [],
+      },
+      svsc: {
+        poster: "https://tse4.mm.bing.net/th?id=OIP.apqNfjeuJ_3GcWwlaOLBQwHaDt&pid=Api&P=0&h=180",
+        description: "A heartwarming family drama starring Mahesh Babu and Venkatesh.",
+        ratings: [],
+      },
+      djtillu: {
+        poster: "https://tse1.mm.bing.net/th?id=OIP.CC1gV70j9MLZIc5x85PWfgHaFj&pid=Api&P=0&h=180",
+        description: "A wild ride with DJ Tillu, a crazy character with a unique style.",
+        ratings: [],
+      },
+      magadheera: {
+        poster: "https://tse2.mm.bing.net/th?id=OIP.z_c1-7cA8pPGxZKqKFhxNwHaFj&pid=Api&P=0&h=180",
+        description: "A reincarnation-based action epic starring Ram Charan.",
+        ratings: [],
+      },
+      bahubali: {
+        poster: "https://tse1.mm.bing.net/th?id=OIP.icBDDSgw7QG0oZ7mtyMqlQHaKG&pid=Api&P=0&h=180",
+        description: "The epic tale of Baahubali's rise and the mystery of his past.",
+        ratings: [],
+      },
+      geethagovindam: {
+        poster: "https://tse3.mm.bing.net/th?id=OIP.rQemUQPoqQ9_ptVZtg6eUAHaJ9&pid=Api&P=0&h=180",
+        description: "A romantic drama filled with misunderstandings and love.",
+        ratings: [],
+      },
+      taxiwala: {
+        poster: "https://tse1.mm.bing.net/th?id=OIP.RWXxUHrgo8gbp37E4rZBhQHaDt&pid=Api&P=0&h=180",
+        description: "A spooky yet fun ride with a possessed car and a chill cabbie.",
+        ratings: [],
+      },
+      sarrainodu: {
+        poster: "https://tse3.mm.bing.net/th?id=OIP.1GcHyZuI8m5DeOO_i0ysUQHaEK&pid=Api&P=0&h=180",
+        description: "An action-packed mass entertainer with Allu Arjun in full form.",
+        ratings: [],
+      }
+    };
+
+    let currentMovie = "";
+
+    function showMovieDetails() {
+      const selected = document.getElementById("movieDropdown").value;
+      const displayArea = document.getElementById("movieDisplay");
+
+      if (selected && movies[selected]) {
+        currentMovie = selected;
+        document.getElementById("moviePoster").src = movies[selected].poster;
+        document.getElementById("movieDescription").textContent = movies[selected].description;
+        document.getElementById("ratingOutput").textContent = "";
+        document.getElementById("avgRatingDisplay").textContent = getAverageRatingText(movies[selected].ratings);
+        document.getElementById("ratingDropdown").value = "";
+        displayArea.style.display = "block";
+      } else {
+        displayArea.style.display = "none";
+        currentMovie = "";
+      }
+    }
+
+    function submitRating() {
+      const ratingValue = parseInt(document.getElementById("ratingDropdown").value);
+      const ratingOutput = document.getElementById("ratingOutput");
+
+      if (!currentMovie || isNaN(ratingValue)) {
+        alert("Please select a movie and give a rating!");
+        return;
+      }
+
+      movies[currentMovie].ratings.push(ratingValue);
+      const stars = '★'.repeat(ratingValue) + '☆'.repeat(5 - ratingValue);
+      ratingOutput.innerHTML = `You rated this movie: <strong>${stars}</strong>`;
+
+      document.getElementById("avgRatingDisplay").textContent = getAverageRatingText(movies[currentMovie].ratings);
+    }
+
+    function getAverageRatingText(ratingsArray) {
+      if (ratingsArray.length === 0) return "No ratings yet.";
+      const avg = ratingsArray.reduce((a, b) => a + b, 0) / ratingsArray.length;
+      const rounded = Math.round(avg);
+      return `⭐ Average Rating: ${'★'.repeat(rounded)}${'☆'.repeat(5 - rounded)} (${avg.toFixed(1)} from ${ratingsArray.length} user(s))`;
+    }
+  </script>
+
+</body>
+</html>

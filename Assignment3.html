@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🎬 Telugu Movie Ratings</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h2>🎥 Rate Your Favorite Telugu Movie</h2>
+  <div class="container">
+    <select id="movieDropdown" onchange="showMovieDetails()">
+      <option value="">-- Choose a movie --</option>
+      <option value="gangleader">Gangleader</option>
+      <option value="pushpa">Pushpa</option>
+      <option value="gunturkaram">Guntur Kaaram</option>
+      <option value="athadu">Athadu</option>
+      <option value="svsc">SVSC</option>
+      <option value="djtillu">DJ Tillu</option>
+      <option value="magadheera">Magadheera</option>
+      <option value="bahubali">Bahubali</option>
+      <option value="geethagovindam">Geetha Govindam</option>
+      <option value="taxiwala">Taxiwala</option>
+      <option value="sarrainodu">Sarrainodu</option>
+    </select>
+
+    <div id="movieDisplay" style="display: none;">
+      <img id="moviePoster" src="" alt="Movie Poster">
+      <div class="description" id="movieDescription"></div>
+
+      <select id="ratingDropdown">
+        <option value="">Give a Rating</option>
+        <option value="5">★★★★★ - Excellent</option>
+        <option value="4">★★★★☆ - Good</option>
+        <option value="3">★★★☆☆ - Average</option>
+        <option value="2">★★☆☆☆ - Poor</option>
+        <option value="1">★☆☆☆☆ - Bad</option>
+      </select>
+
+      <button onclick="submitRating()">Submit Rating</button>
+
+      <div class="rating-display" id="ratingOutput"></div>
+      <div class="rating-display" id="avgRatingDisplay"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
